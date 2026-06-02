@@ -1,0 +1,14 @@
+all: dev
+
+install-dependencies:
+  bun install
+
+dev: install-dependencies
+  bun run dev
+
+build: install-dependencies
+  bun run build
+
+serve: build
+  bun run preview
+
