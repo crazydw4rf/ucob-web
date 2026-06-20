@@ -10,7 +10,7 @@ class ApiWrapper<T = any> {
       baseURL: API_URL,
       timeout: 5000,
       headers: { "Content-Type": "application/json", Accept: "application/json" },
-      withCredentials: true,
+      // withCredentials: true,
     });
 
     this.#endpoint = endpoint;

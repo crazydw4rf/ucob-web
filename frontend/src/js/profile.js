@@ -1,10 +1,10 @@
-import { showLoader } from "./utils.js";
+import { showLoader, hideLoader } from "./utils.js";
+import { ambilDataUser } from "./http/auth.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   showLoader();
 
-  // FIXME: cek kalau user sudah login
-  const user = await checkAuth();
+  const user = await ambilDataUser();
 
   if (!user) {
     window.location.href = "login.html";

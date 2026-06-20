@@ -32,3 +32,23 @@ export const UserRole = {
   Admin: "Admin",
   User: "User",
 } as const;
+
+// src/js/types.ts
+
+// Struktur data User sesuai ERD Database UCOB
+export interface User {
+  id: number;
+  first_name: string;
+  last_name: string | null;
+  email: string;
+  role: "ADMIN" | "USER";
+  created_at?: string;
+}
+
+// Payload untuk registrasi pengguna baru
+export interface RegisterPayload {
+  first_name: string;
+  last_name?: string;
+  email: string;
+  password: string;
+}

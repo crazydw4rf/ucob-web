@@ -1,6 +1,7 @@
 import { API_URL } from "./constants";
-import { showLoader } from "./utils";
+import { showLoader, hideLoader } from "./utils";
 import { Modal } from "bootstrap";
+import { checkAuth } from "./http/auth.js";
 
 let currentUser = null;
 const imageModal = new Modal(document.getElementById("imageModal"));

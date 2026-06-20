@@ -10,7 +10,10 @@ loginForm.addEventListener("submit", async (e) => {
   const alertContainer = document.getElementById("alert-container");
   const submitBtn = e.target.querySelector('button[type="submit"]');
 
-  // Clear previous alerts
+  if (!alertContainer || !submitBtn) {
+    return;
+  }
+
   alertContainer.innerHTML = "";
 
   try {
@@ -18,34 +21,21 @@ loginForm.addEventListener("submit", async (e) => {
     submitBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging in...';
 
-    // const response = await fetch(`${API_URL}/auth/login`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     email: email,
-    //     password: password,
-    //   }),
-    // });
-    //
-    // const data = await response.json();
+    const response = await ApiRequest("/auth/login").postRequest({
+      email,
+      password,
+    });
+    const data = JSON.parse(response.data);
+    console.log("Login response:");
 
-    const req = ApiRequest("/auth/login");
-    let data = await req.postRequest({ email, password });
-    data = JSON.parse(data.data);
-
-    console.log(data);
-
-    if (data.code < 400 && data.success) {
+    if (data?.success) {
       alertContainer.innerHTML = '<div class="alert alert-success">Login successful! Redirecting...</div>';
 
       setTimeout(() => {
         window.location.href = "dashboard.html";
       }, 1000);
     } else {
-      alertContainer.innerHTML = `<div class="alert alert-danger">${data.error?.message || "Login failed. Please check your credentials."}</div>`;
+      alertContainer.innerHTML = `<div class="alert alert-danger">${data?.error?.message || "Login failed. Please check your credentials."}</div>`;
     }
   } catch (error) {
     console.error("Login error:", error);

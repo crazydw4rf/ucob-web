@@ -12,7 +12,10 @@ form.addEventListener("submit", async (e) => {
   const alertContainer = document.getElementById("alert-container");
   const submitBtn = e.target.querySelector('button[type="submit"]');
 
-  // Clear previous alerts
+  if (!alertContainer || !submitBtn) {
+    return;
+  }
+
   alertContainer.innerHTML = "";
 
   if (password.length < 6) {
@@ -31,6 +34,7 @@ form.addEventListener("submit", async (e) => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         first_name: firstName,
         last_name: lastName || undefined,
