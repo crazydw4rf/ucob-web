@@ -1,19 +1,32 @@
-import { API_URL } from "./constants";
+import { registerUser } from "./http/user.js";
 
 const form = document.getElementById("register-form");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const firstName = document.getElementById("firstName").value.trim();
-  const lastName = document.getElementById("lastName").value.trim();
+  const username = document.getElementById("username").value.trim();
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const alertContainer = document.getElementById("alert-container");
   const submitBtn = e.target.querySelector('button[type="submit"]');
 
-  // Clear previous alerts
+  if (!alertContainer || !submitBtn) {
+    return;
+  }
+
   alertContainer.innerHTML = "";
+
+  if (!username || !email || !password) {
+    alertContainer.innerHTML = '<div class="alert alert-danger">Please fill in all required fields.</div>';
+    return;
+  }
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email)) {
+    alertContainer.innerHTML = '<div class="alert alert-danger">Please enter a valid email address.</div>';
+    return;
+  }
 
   if (password.length < 6) {
     alertContainer.innerHTML = '<div class="alert alert-danger">Password must be at least 6 characters long.</div>';
@@ -25,30 +38,23 @@ form.addEventListener("submit", async (e) => {
     submitBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Registering...';
 
-    const response = await fetch(`${API_URL}/users`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        first_name: firstName,
-        last_name: lastName || undefined,
-        email: email,
-        password: password,
-      }),
+    const data = await registerUser({
+      username,
+      email,
+      password,
     });
 
-    const data = await response.json();
+    const isSuccess = data?.success === true || data?.code === 201 || data?.code === 200;
 
-    if (response.ok && data.success) {
+    if (isSuccess) {
       alertContainer.innerHTML =
         '<div class="alert alert-success">Registration successful! Redirecting to login...</div>';
       setTimeout(() => {
         window.location.href = "login.html";
       }, 2000);
     } else {
-      alertContainer.innerHTML = `<div class="alert alert-danger">${data.error?.message || "Registration failed. Please try again."}</div>`;
+      const errorMessage = data?.error?.message || data?.message || "Registration failed. Please try again.";
+      alertContainer.innerHTML = `<div class="alert alert-danger">${errorMessage}</div>`;
     }
   } catch (error) {
     console.error("Registration error:", error);
@@ -56,6 +62,6 @@ form.addEventListener("submit", async (e) => {
       '<div class="alert alert-danger">An unexpected error occurred. Check if the server is running.</div>';
   } finally {
     submitBtn.disabled = false;
-    submitBtn.textContent = "Register";
+    submitBtn.innerHTML = "Register";
   }
 });

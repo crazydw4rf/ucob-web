@@ -1,1 +1,21 @@
-// TODO: kumpulan fungsi untuk memanggil REST API untuk keperluan autentikasi seperti login dan logout
+import ApiRequest from "../api";
+
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+export async function loginUser(payload: LoginPayload) {
+  const response = await ApiRequest("/auth/login").postRequest(payload);
+  const responseData = response?.data ?? response;
+
+  if (typeof responseData === "string") {
+    try {
+      return JSON.parse(responseData);
+    } catch {
+      return responseData;
+    }
+  }
+
+  return responseData;
+}
