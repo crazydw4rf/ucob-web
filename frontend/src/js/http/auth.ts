@@ -1,21 +1,21 @@
 import ApiRequest from "../api";
 
-export async function ambilDataUser() {
-  const response = await ApiRequest("/users/me").getRequest();
-  const payload = response.data;
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
 
-  if (!payload?.success) {
-    return null;
+export async function loginUser(payload: LoginPayload) {
+  const response = await ApiRequest("/auth/login").postRequest(payload);
+  const responseData = response?.data ?? response;
+
+  if (typeof responseData === "string") {
+    try {
+      return JSON.parse(responseData);
+    } catch {
+      return responseData;
+    }
   }
 
-  return payload.data;
-}
-
-export async function checkAuth() {
-  try {
-    return await ambilDataUser();
-  } catch (error) {
-    console.error("Auth check failed:", error);
-    return null;
-  }
+  return responseData;
 }

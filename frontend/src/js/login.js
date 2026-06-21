@@ -1,4 +1,4 @@
-import { ApiRequest } from "./api";
+import { loginUser } from "./http/auth.js";
 
 const loginForm = document.getElementById("login-form");
 
@@ -21,12 +21,7 @@ loginForm.addEventListener("submit", async (e) => {
     submitBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging in...';
 
-    const response = await ApiRequest("/auth/login").postRequest({
-      email,
-      password,
-    });
-    const data = JSON.parse(response.data);
-    console.log("Login response:");
+    const data = await loginUser({ email, password });
 
     if (data?.success) {
       alertContainer.innerHTML = '<div class="alert alert-success">Login successful! Redirecting...</div>';
@@ -43,6 +38,6 @@ loginForm.addEventListener("submit", async (e) => {
       '<div class="alert alert-danger">An unexpected error occurred. Check if the server is running.</div>';
   } finally {
     submitBtn.disabled = false;
-    submitBtn.textContent = "Log In";
+    submitBtn.innerHTML = "Log In";
   }
 });
