@@ -31,7 +31,7 @@ export async function ambilDataUser() {
     return null;
   }
 
-  return payload.data;
+  return JSON.parse(payload.data);
 }
 
 export async function checkAuth() {
