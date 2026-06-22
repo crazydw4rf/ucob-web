@@ -203,7 +203,8 @@ window.verifyRequest = async (type, id, status) => {
 document.addEventListener("DOMContentLoaded", async () => {
   showLoader();
   currentUser = await checkAuth();
-  return;
+
+  console.log(currentUser);
 
   if (!currentUser) {
     window.location.href = "login.html";
