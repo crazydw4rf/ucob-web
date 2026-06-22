@@ -27,11 +27,14 @@ export async function ambilDataUser() {
   const response = await ApiRequest("/users/me").getRequest();
   const payload = isAxiosResponse(response) ? response.data : response;
 
+  console.log(response);
+  console.log(payload);
+
   if (!payload?.success) {
     return null;
   }
 
-  return JSON.parse(payload.data);
+  return JSON.parse(payload);
 }
 
 export async function checkAuth() {
