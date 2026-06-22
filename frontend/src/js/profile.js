@@ -1,5 +1,5 @@
 import { showLoader, hideLoader } from "./utils.js";
-import { ambilDataUser } from "./http/auth.js";
+import { ambilDataUser } from "./http/user.ts";
 
 document.addEventListener("DOMContentLoaded", async () => {
   showLoader();
