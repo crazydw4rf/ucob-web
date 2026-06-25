@@ -1,14 +1,14 @@
 import { API_URL } from "./constants";
-import { Axios } from "axios";
+import axios, { type AxiosResponse } from "axios";
 
 class ApiWrapper<T = any> {
   #endpoint;
   #axios;
 
   constructor(endpoint: string) {
-    this.#axios = new Axios({
+    this.#axios = axios.create({
       baseURL: API_URL,
-      timeout: 5000,
+      timeout: 10000,
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       withCredentials: true,
     });
@@ -21,7 +21,7 @@ class ApiWrapper<T = any> {
   }
 
   async postRequest(payload: object) {
-    return await this.#axios.post<T>(this.#endpoint, JSON.stringify(payload));
+    return await this.#axios.post<T>(this.#endpoint, payload);
   }
 }
 

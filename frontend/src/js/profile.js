@@ -1,5 +1,5 @@
 import { showLoader, hideLoader } from "./utils.js";
-import { ambilDataUser } from "./http/user.ts";
+import { ambilDataUser } from "./http/user.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   showLoader();
@@ -11,16 +11,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const fullName = `${user.first_name} ${user.last_name || ""}`.trim();
-  document.getElementById("profile-name").textContent = fullName;
-  document.getElementById("profile-first-name").textContent = user.first_name;
-  document.getElementById("profile-last-name").textContent = user.last_name || "-";
+  const username = user.username || user.first_name || "User";
+  const roleText = user.role === "ADMIN" ? "Admin" : "User";
+
+  document.getElementById("profile-name").textContent = username;
+  document.getElementById("profile-username").textContent = username;
   document.getElementById("profile-email").textContent = user.email;
 
   const roleBadge = document.getElementById("profile-role");
-  roleBadge.textContent = user.role;
-  if (user.role === "ADMIN") {
-    roleBadge.classList.replace("bg-primary", "bg-danger");
+  roleBadge.textContent = roleText;
+  roleBadge.classList.remove("bg-primary", "bg-danger");
+  roleBadge.classList.add(user.role === "ADMIN" ? "bg-danger" : "bg-primary");
+
+  const navbarUserName = document.getElementById("navbar-user-name");
+  if (navbarUserName) {
+    navbarUserName.textContent = username;
+    navbarUserName.className = `ms-2 badge ${user.role === "ADMIN" ? "bg-danger-subtle text-danger" : "bg-success-subtle text-success"}`;
   }
 
   hideLoader();

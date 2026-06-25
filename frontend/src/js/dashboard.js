@@ -1,7 +1,7 @@
 import { API_URL } from "./constants";
-import { showLoader, hideLoader } from "./utils";
+import { showLoader, hideLoader, gsapAnimReveal, syncUserProfile } from "./utils";
 import { Modal } from "bootstrap";
-import { checkAuth } from "./http/user.ts";
+import { checkAuth } from "./http/user.js";
 
 let currentUser = null;
 const imageModal = new Modal(document.getElementById("imageModal"));
@@ -202,72 +202,96 @@ window.verifyRequest = async (type, id, status) => {
 // --- INIT ---
 document.addEventListener("DOMContentLoaded", async () => {
   showLoader();
-  currentUser = await checkAuth();
 
-  console.log(currentUser);
+  const authResult = await checkAuth();
+  currentUser = authResult?.data ?? null;
 
   if (!currentUser) {
     window.location.href = "login.html";
     return;
   }
 
-  document.getElementById("sidebar-user-name").textContent = currentUser.first_name;
+  gsapAnimReveal();
+  hideLoader();
 
-  // Style active pills dynamically
-  document.querySelectorAll("#v-pills-tab .nav-link").forEach((pill) => {
-    pill.addEventListener("shown.bs.tab", (e) => {
-      document
-        .querySelectorAll("#v-pills-tab .nav-link")
-        .forEach((p) => p.classList.remove("bg-light", "text-primary", "text-secondary"));
-      e.target.classList.add(
-        "bg-light",
-        e.target.id.includes("sell") ? "text-primary" : e.target.id.includes("buy") ? "text-secondary" : "text-primary"
-      );
+  const sidebarUserName = document.getElementById("sidebar-user-name");
+  if (sidebarUserName) sidebarUserName.innerText = currentUser.username;
+
+  await syncUserProfile();
+
+  const vPills = document.querySelectorAll("#v-pills-tab .nav-link");
+  if (vPills.length) {
+    vPills.forEach((pill) => {
+      pill.addEventListener("shown.bs.tab", (e) => {
+        vPills.forEach((p) => p.classList.remove("bg-light", "text-primary", "text-secondary"));
+        e.target.classList.add(
+          "bg-light",
+          e.target.id.includes("sell")
+            ? "text-primary"
+            : e.target.id.includes("buy")
+              ? "text-secondary"
+              : "text-primary"
+        );
+      });
     });
-  });
+  }
 
   if (currentUser.role === "ADMIN") {
-    // Admin Setup
-    document.getElementById("admin-badge").classList.remove("d-none");
-    document.getElementById("top-navbar").classList.replace("bg-white", "bg-dark");
-    document.getElementById("top-navbar").classList.add("navbar-dark");
-    document.getElementById("sidebar-user-role").textContent = "Admin";
+    const adminBadge = document.getElementById("admin-badge");
+    if (adminBadge) adminBadge.classList.remove("d-none");
+    const topNavbar = document.getElementById("top-navbar");
+    if (topNavbar) {
+      topNavbar.classList.replace("bg-white", "bg-dark");
+      topNavbar.classList.add("navbar-dark");
+    }
+    const sidebarUserRole = document.getElementById("sidebar-user-role");
+    if (sidebarUserRole) sidebarUserRole.textContent = "Admin";
 
-    document.getElementById("admin-menu").classList.remove("d-none");
+    const adminMenu = document.getElementById("admin-menu");
+    if (adminMenu) adminMenu.classList.remove("d-none");
 
-    // Activate first admin tab
-    const firstAdminTab = new bootstrap.Tab(document.getElementById("tab-admin-sell"));
-    firstAdminTab.show();
-    document.getElementById("tab-admin-sell").classList.add("bg-light", "text-primary");
+    const tabAdminSell = document.getElementById("tab-admin-sell");
+    if (tabAdminSell) {
+      const firstAdminTab = new bootstrap.Tab(tabAdminSell);
+      firstAdminTab.show();
+      tabAdminSell.classList.add("bg-light", "text-primary");
+    }
 
     await loadAdminData("sell");
     await loadAdminData("buy");
   } else {
-    // User Setup
-    document.getElementById("user-menu").classList.remove("d-none");
+    const userMenu = document.getElementById("user-menu");
+    if (userMenu) {
+      userMenu.classList.remove("d-none");
+      const tabUserOverview = document.getElementById("tab-user-overview");
+      if (tabUserOverview) {
+        const firstUserTab = new bootstrap.Tab(tabUserOverview);
+        firstUserTab.show();
+        tabUserOverview.classList.add("bg-light", "text-primary");
+      }
+    }
 
-    // Activate first user tab
-    const firstUserTab = new bootstrap.Tab(document.getElementById("tab-user-overview"));
-    firstUserTab.show();
-    document.getElementById("tab-user-overview").classList.add("bg-light", "text-primary");
+    if (document.getElementById("sell-form")) {
+      setupImagePreview("sell-photo", "sell-preview-img", "sell-preview-container");
+      setupForm("sell-form", "sell-alert-container", "SELL", "/sell-requests", (photoUrl) => ({
+        quantity_liter: parseFloat(document.getElementById("sell-quantity").value),
+        pickup_address: document.getElementById("sell-address").value,
+        photo_url: photoUrl,
+      }));
+    }
 
-    // Setup Forms
-    setupImagePreview("sell-photo", "sell-preview-img", "sell-preview-container");
-    setupImagePreview("buy-proof", "buy-preview-img", "buy-preview-container");
+    if (document.getElementById("buy-form")) {
+      setupImagePreview("buy-proof", "buy-preview-img", "buy-preview-container");
+      setupForm("buy-form", "buy-alert-container", "BUY", "/buy-requests", (photoUrl) => ({
+        quantity_liter: parseFloat(document.getElementById("buy-quantity").value),
+        delivery_address: document.getElementById("buy-address").value,
+        payment_proof_url: photoUrl,
+      }));
+    }
 
-    setupForm("sell-form", "sell-alert-container", "SELL", "/sell-requests", (photoUrl) => ({
-      quantity_liter: parseFloat(document.getElementById("sell-quantity").value),
-      pickup_address: document.getElementById("sell-address").value,
-      photo_url: photoUrl,
-    }));
-
-    setupForm("buy-form", "buy-alert-container", "BUY", "/buy-requests", (photoUrl) => ({
-      quantity_liter: parseFloat(document.getElementById("buy-quantity").value),
-      delivery_address: document.getElementById("buy-address").value,
-      payment_proof_url: photoUrl,
-    }));
-
-    await loadUserHistory();
+    if (document.getElementById("user-sell-history") || document.getElementById("user-buy-history")) {
+      await loadUserHistory();
+    }
   }
 
   hideLoader();

@@ -6,16 +6,21 @@ export type LoginPayload = {
 };
 
 export async function loginUser(payload: LoginPayload) {
-  const response = await ApiRequest("/auth/login").postRequest(payload);
-  const responseData = response?.data ?? response;
+  try {
+    const response = await ApiRequest("/auth/login").postRequest(payload);
+    const responseData = response?.data ?? response;
 
-  if (typeof responseData === "string") {
-    try {
-      return JSON.parse(responseData);
-    } catch {
-      return responseData;
+    if (typeof responseData === "string") {
+      try {
+        return JSON.parse(responseData);
+      } catch {
+        return responseData;
+      }
     }
-  }
 
-  return responseData;
+    return responseData;
+  } catch (error: any) {
+    const errMessage = error?.response?.data?.error?.message || error?.message || "Login failed";
+    return { success: false, error: { message: errMessage } };
+  }
 }

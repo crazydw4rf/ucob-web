@@ -14,13 +14,21 @@ function isAxiosResponse(o: any): o is AxiosResponse {
 }
 
 export async function registerUser(payload: RegisterPayload) {
-  const response = await ApiRequest("/users").postRequest(payload);
+  try {
+    const response = await ApiRequest("/users").postRequest(payload);
 
-  return {
-    code: response?.status ?? 500,
-    data: isAxiosResponse(response) ? response.data : response,
-    success: isAxiosResponse(response) ? (response.data?.success ?? false) : false,
-  };
+    return {
+      code: response?.status ?? 500,
+      data: isAxiosResponse(response) ? response.data : response,
+      success: isAxiosResponse(response) ? (response.data?.success ?? false) : false,
+    };
+  } catch (error: any) {
+    return {
+      code: error?.response?.status ?? 500,
+      data: error?.response?.data ?? null,
+      success: false,
+    };
+  }
 }
 
 export async function ambilDataUser() {
