@@ -86,15 +86,10 @@
     <!-- Dashboard Layout -->
     <div class="dashboard-wrapper d-flex flex-grow-1">
       <!-- Sidebar -->
-      <aside
-        class="sidebar d-flex flex-column shadow-sm bg-white"
-        style="width: 200px; z-index: 10; padding: 15px 10px"
-      >
-        <h6 class="text-uppercase text-muted fw-bold mb-3 px-2" style="font-size: 0.75rem; letter-spacing: 1px">
-          Navigation
-        </h6>
+      <aside class="sidebar d-flex flex-column shadow-sm bg-white" style="z-index: 10">
+        <h6 class="text-uppercase text-muted fw-bold mb-3 px-3" style="font-size: 0.75rem">Navigation</h6>
 
-        <div class="nav flex-column">
+        <div class="nav flex-column sidebar-nav px-2">
           <a href="selloil.html" class="nav-link text-dark" id="nav-sell">
             <i class="bi bi-droplet-fill me-2"></i> Sell Some Oil
           </a>
@@ -109,15 +104,12 @@
           </a>
         </div>
 
-        <!-- Sidebar User Profile -->
-        <div class="mt-auto border-top pt-3">
+        <div class="mt-auto border-top pt-3 px-3 pb-2 sidebar-profile">
           <div class="d-flex align-items-center mb-3">
             <i class="bi bi-person-circle text-warning" style="font-size: 2rem"></i>
-            <div class="ms-2">
-              <div class="fw-bold text-truncate" id="sidebar-user-name" style="font-size: 0.95rem; max-width: 120px">
-                John Doe
-              </div>
-              <div class="small text-muted">User</div>
+            <div class="ms-2 overflow-hidden">
+              <div class="fw-bold text-truncate" id="sidebar-user-name" style="font-size: 0.95rem">Loading...</div>
+              <div class="small text-muted" id="sidebar-user-role">User</div>
             </div>
           </div>
           <button class="btn btn-outline-danger btn-sm w-100 btn-logout">
@@ -147,13 +139,14 @@
                     <tr>
                       <th class="ps-4">Tanggal</th>
                       <th>Quantity (L)</th>
+                      <th>Seller Address</th>
                       <th>Harga Total</th>
                       <th>Status</th>
                     </tr>
                   </thead>
                   <tbody id="sell-history-table">
                     <tr>
-                      <td colspan="4" class="text-center py-4 text-muted">Tidak ada data penjualan</td>
+                      <td colspan="5" class="text-center py-4 text-muted">Tidak ada data penjualan</td>
                     </tr>
                   </tbody>
                 </table>
@@ -173,13 +166,14 @@
                     <tr>
                       <th class="ps-4">Tanggal</th>
                       <th>Quantity (L)</th>
+                      <th>Delivery Address</th>
                       <th>Harga Total</th>
                       <th>Status</th>
                     </tr>
                   </thead>
                   <tbody id="buy-history-table">
                     <tr>
-                      <td colspan="4" class="text-center py-4 text-muted">Tidak ada data pembelian</td>
+                      <td colspan="5" class="text-center py-4 text-muted">Tidak ada data pembelian</td>
                     </tr>
                   </tbody>
                 </table>

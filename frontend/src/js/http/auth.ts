@@ -5,6 +5,16 @@ export type LoginPayload = {
   password: string;
 };
 
+export async function logoutUser() {
+  try {
+    await ApiRequest("/auth/logout").postRequest({});
+    return { success: true };
+  } catch (error: any) {
+    const errMessage = error?.response?.data?.error?.message || error?.message || "Logout failed";
+    return { success: false, error: { message: errMessage } };
+  }
+}
+
 export async function loginUser(payload: LoginPayload) {
   try {
     const response = await ApiRequest("/auth/login").postRequest(payload);

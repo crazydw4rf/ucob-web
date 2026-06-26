@@ -195,8 +195,13 @@ h6 {
   border-right: 1px solid rgba(0, 0, 0, 0.05);
   padding: 2rem 1rem;
   height: calc(100vh - 76px);
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-nav {
   flex-shrink: 0;
 }
 
@@ -221,6 +226,150 @@ h6 {
   background: var(--bg-color);
   overflow-y: auto;
   min-width: 0;
+  height: calc(100vh - 76px);
+}
+
+/* --- Info Page --- */
+.info-page-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.info-card {
+  background: linear-gradient(135deg, #e7f1e0 0%, #f0f8f4 100%);
+  border-left: 4px solid var(--primary-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  height: 100%;
+}
+
+.info-card-title {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.info-card-title i {
+  font-size: 1.25rem;
+}
+
+.info-card-content {
+  color: #555;
+  line-height: 1.65;
+}
+
+.info-card-content ol,
+.info-card-content ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.info-card-content li + li {
+  margin-top: 0.35rem;
+}
+
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.price-table th {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.price-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+  background: white;
+}
+
+.faq-section .accordion-item {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-md) !important;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.faq-section .accordion-item:last-child {
+  margin-bottom: 0;
+}
+
+.faq-section .accordion-button {
+  font-weight: 600;
+  padding: 1rem 1.25rem;
+  background-color: #fff;
+}
+
+.faq-section .accordion-button:not(.collapsed) {
+  color: var(--primary-color);
+  background-color: rgba(46, 125, 50, 0.08);
+  box-shadow: none;
+}
+
+.faq-section .accordion-body {
+  padding: 1rem 1.25rem 1.25rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.sidebar-profile {
+  flex-shrink: 0;
+}
+
+/* --- Admin Layout --- */
+.admin-layout .admin-sidebar {
+  background: #fff;
+  border-right: 1px solid rgba(220, 53, 69, 0.15);
+}
+
+.admin-layout .admin-sidebar .nav-link.active {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.admin-stat-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+}
+
+.admin-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.admin-stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.admin-stat-label {
+  color: var(--text-muted);
+  font-size: 0.875rem;
 }
 
 /* --- Status Badges --- */
@@ -304,6 +453,9 @@ h6 {
   .hero-title {
     font-size: 2.5rem;
   }
+  .info-page-grid {
+    grid-template-columns: 1fr;
+  }
   .dashboard-wrapper {
     flex-direction: column;
     min-height: auto;
@@ -320,5 +472,6 @@ h6 {
   }
   .dashboard-content {
     overflow: visible;
+    height: auto;
   }
 }

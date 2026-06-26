@@ -27,54 +27,6 @@
         color: #22863a !important;
         font-weight: 500;
       }
-
-      .info-card {
-        background: linear-gradient(135deg, #e7f1e0 0%, #f0f8f4 100%);
-        border-left: 4px solid #22863a;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-      }
-
-      .info-card-title {
-        color: #22863a;
-        font-weight: 600;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .info-card-title i {
-        font-size: 1.5rem;
-      }
-
-      .info-card-content {
-        color: #555;
-        line-height: 1.6;
-      }
-
-      .price-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-      }
-
-      .price-table th {
-        background-color: #22863a;
-        color: white;
-        padding: 12px;
-        text-align: left;
-      }
-
-      .price-table td {
-        padding: 12px;
-        border-bottom: 1px solid #dee2e6;
-      }
-
-      .price-table tr:hover {
-        background-color: #f8f9fa;
-      }
     </style>
   </head>
   <body class="d-flex flex-column min-vh-100 bg-light">
@@ -110,15 +62,10 @@
     <!-- Dashboard Layout -->
     <div class="dashboard-wrapper d-flex flex-grow-1">
       <!-- Sidebar -->
-      <aside
-        class="sidebar d-flex flex-column shadow-sm bg-white"
-        style="width: 200px; z-index: 10; padding: 15px 10px"
-      >
-        <h6 class="text-uppercase text-muted fw-bold mb-3 px-2" style="font-size: 0.75rem; letter-spacing: 1px">
-          Navigation
-        </h6>
+      <aside class="sidebar d-flex flex-column shadow-sm bg-white" style="z-index: 10">
+        <h6 class="text-uppercase text-muted fw-bold mb-3 px-3" style="font-size: 0.75rem">Navigation</h6>
 
-        <div class="nav flex-column">
+        <div class="nav flex-column sidebar-nav px-2">
           <a href="selloil.html" class="nav-link text-dark" id="nav-sell">
             <i class="bi bi-droplet-fill me-2"></i> Sell Some Oil
           </a>
@@ -133,15 +80,12 @@
           </a>
         </div>
 
-        <!-- Sidebar User Profile -->
-        <div class="mt-auto border-top pt-3">
+        <div class="mt-auto border-top pt-3 px-3 pb-2 sidebar-profile">
           <div class="d-flex align-items-center mb-3">
             <i class="bi bi-person-circle text-warning" style="font-size: 2rem"></i>
-            <div class="ms-2">
-              <div class="fw-bold text-truncate" id="sidebar-user-name" style="font-size: 0.95rem; max-width: 120px">
-                John Doe
-              </div>
-              <div class="small text-muted">User</div>
+            <div class="ms-2 overflow-hidden">
+              <div class="fw-bold text-truncate" id="sidebar-user-name" style="font-size: 0.95rem">Loading...</div>
+              <div class="small text-muted" id="sidebar-user-role">User</div>
             </div>
           </div>
           <button class="btn btn-outline-danger btn-sm w-100 btn-logout">
@@ -152,109 +96,98 @@
 
       <!-- Main Content -->
       <main class="dashboard-content flex-grow-1">
-        <div class="container-fluid p-4">
-          <!-- Header Section -->
+        <div class="container-fluid p-4 gsap-reveal">
           <div class="mb-4">
-            <h2 class="text-dark fw-bold">Informasi Penjualan</h2>
-            <p class="text-muted">Pelajari lebih lanjut tentang program penjualan dan pembelian minyak kami.</p>
+            <h2 class="text-dark fw-bold mb-1">Informasi Penjualan</h2>
+            <p class="text-muted mb-0">Pelajari lebih lanjut tentang program penjualan dan pembelian minyak kami.</p>
           </div>
 
-          <!-- Info Cards -->
-          <div class="row">
-            <div class="col-12 col-lg-6">
-              <!-- Sell Info -->
-              <div class="info-card">
-                <div class="info-card-title">
-                  <i class="bi bi-droplet-fill"></i>
-                  Cara Menjual Minyak
-                </div>
-                <div class="info-card-content">
-                  <ol style="margin: 0; padding-left: 20px">
-                    <li>Masukkan volume minyak jelantah yang ingin dijual</li>
-                    <li>Sistem akan menghitung harga otomatis berdasarkan tarif saat ini</li>
-                    <li>Konfirmasi lokasi penjemputan</li>
-                    <li>Tim kami akan menghubungi untuk proses verifikasi</li>
-                    <li>Setelah disetujui, tim akan menjemput minyak Anda</li>
-                  </ol>
-                </div>
+          <div class="info-page-grid mb-4">
+            <div class="info-card">
+              <div class="info-card-title">
+                <i class="bi bi-droplet-fill"></i>
+                Cara Menjual Minyak
               </div>
-
-              <!-- Requirements -->
-              <div class="info-card">
-                <div class="info-card-title">
-                  <i class="bi bi-checklist"></i>
-                  Persyaratan Penjualan
-                </div>
-                <div class="info-card-content">
-                  <ul style="margin: 0; padding-left: 20px">
-                    <li>Minyak dalam kondisi layak jual (tidak terlalu kotor)</li>
-                    <li>Minimum penjualan: 1 Liter</li>
-                    <li>Maksimum per transaksi: Tidak terbatas</li>
-                    <li>Lokasi penjemputan harus jelas dan mudah diakses</li>
-                    <li>Foto minyak harus jelas dan terlihat real</li>
-                  </ul>
-                </div>
+              <div class="info-card-content">
+                <ol>
+                  <li>Masukkan volume minyak jelantah yang ingin dijual</li>
+                  <li>Sistem akan menghitung harga otomatis berdasarkan tarif saat ini</li>
+                  <li>Konfirmasi lokasi penjemputan</li>
+                  <li>Tim kami akan menghubungi untuk proses verifikasi</li>
+                  <li>Setelah disetujui, tim akan menjemput minyak Anda</li>
+                </ol>
               </div>
             </div>
 
-            <div class="col-12 col-lg-6">
-              <!-- Current Pricing -->
-              <div class="info-card">
-                <div class="info-card-title">
-                  <i class="bi bi-cash-coin"></i>
-                  Harga Saat Ini
-                </div>
-                <div class="info-card-content">
-                  <table class="price-table">
-                    <thead>
-                      <tr>
-                        <th>Jenis Transaksi</th>
-                        <th>Harga per Liter</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong>Penjualan Minyak</strong></td>
-                        <td><strong>Rp 6.000</strong></td>
-                      </tr>
-                      <tr>
-                        <td><strong>Pembelian Minyak</strong></td>
-                        <td><strong>Rp 5.500</strong></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <p class="small text-muted mt-3 mb-0">
-                    <i class="bi bi-exclamation-circle me-2"></i>Harga dapat berubah sewaktu-waktu sesuai kondisi pasar.
-                  </p>
-                </div>
+            <div class="info-card">
+              <div class="info-card-title">
+                <i class="bi bi-cash-coin"></i>
+                Harga Saat Ini
               </div>
+              <div class="info-card-content">
+                <table class="price-table">
+                  <thead>
+                    <tr>
+                      <th>Jenis Transaksi</th>
+                      <th>Harga per Liter</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Penjualan Minyak</strong></td>
+                      <td><strong>Rp 6.000</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Pembelian Minyak</strong></td>
+                      <td><strong>Rp 5.500</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p class="small text-muted mt-3 mb-0">
+                  <i class="bi bi-exclamation-circle me-2"></i>Harga dapat berubah sewaktu-waktu sesuai kondisi pasar.
+                </p>
+              </div>
+            </div>
 
-              <!-- Benefits -->
-              <div class="info-card">
-                <div class="info-card-title">
-                  <i class="bi bi-star-fill"></i>
-                  Keuntungan Bergabung
-                </div>
-                <div class="info-card-content">
-                  <ul style="margin: 0; padding-left: 20px">
-                    <li>Harga kompetitif dan transparan</li>
-                    <li>Proses cepat dan mudah</li>
-                    <li>Tim profesional dan berpengalaman</li>
-                    <li>Jaminan kepuasan pelanggan</li>
-                    <li>Program loyalitas untuk pelanggan setia</li>
-                  </ul>
-                </div>
+            <div class="info-card">
+              <div class="info-card-title">
+                <i class="bi bi-checklist"></i>
+                Persyaratan Penjualan
+              </div>
+              <div class="info-card-content">
+                <ul>
+                  <li>Minyak dalam kondisi layak jual (tidak terlalu kotor)</li>
+                  <li>Minimum penjualan: 1 Liter</li>
+                  <li>Maksimum per transaksi: Tidak terbatas</li>
+                  <li>Lokasi penjemputan harus jelas dan mudah diakses</li>
+                  <li>Foto minyak harus jelas dan terlihat real</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-title">
+                <i class="bi bi-star-fill"></i>
+                Keuntungan Bergabung
+              </div>
+              <div class="info-card-content">
+                <ul>
+                  <li>Harga kompetitif dan transparan</li>
+                  <li>Proses cepat dan mudah</li>
+                  <li>Tim profesional dan berpengalaman</li>
+                  <li>Jaminan kepuasan pelanggan</li>
+                  <li>Program loyalitas untuk pelanggan setia</li>
+                </ul>
               </div>
             </div>
           </div>
 
-          <!-- FAQ Section -->
-          <div class="card border-0 shadow-sm mt-4">
-            <div class="card-header bg-white">
-              <h5 class="mb-0"><i class="bi bi-question-circle me-2"></i>Pertanyaan Umum (FAQ)</h5>
+          <div class="card border-0 shadow-sm faq-section">
+            <div class="card-header bg-white border-bottom py-3">
+              <h5 class="mb-0 fw-bold"><i class="bi bi-question-circle me-2 text-success"></i>Pertanyaan Umum (FAQ)</h5>
             </div>
-            <div class="card-body">
-              <div class="accordion" id="faqAccordion">
+            <div class="card-body p-4">
+              <div class="accordion accordion-flush" id="faqAccordion">
                 <div class="accordion-item">
                   <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
@@ -281,10 +214,9 @@
                   </h2>
                   <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                     <div class="accordion-body">
-                      Pembayaran dilakukan langsung secara cash, serta dapat melakukan pembayaran melalui transfer bank
-                      atau E-Wallet rekening official kami. Pastikan untuk memeriksa metode pembayaran yang tersedia
-                      saat melakukan transaksi. sangat disarankan untuk melakukan pembayaran secara cash untuk
-                      mempermudah proses transaksi atau tawar-menawar.
+                      Pembayaran dilakukan langsung secara cash, serta dapat melalui transfer bank atau E-Wallet rekening
+                      resmi kami. Sangat disarankan menggunakan cash untuk mempermudah proses transaksi atau
+                      tawar-menawar.
                     </div>
                   </div>
                 </div>

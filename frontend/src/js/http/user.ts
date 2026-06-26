@@ -32,18 +32,22 @@ export async function registerUser(payload: RegisterPayload) {
 }
 
 export async function ambilDataUser() {
-  const response = await ApiRequest("/users/me").getRequest();
-  let payload = isAxiosResponse(response) ? response.data : response;
+  try {
+    const response = await ApiRequest("/users/me").getRequest();
+    let payload = isAxiosResponse(response) ? response.data : response;
 
-  if (typeof payload != "object") {
-    payload = JSON.parse(payload);
-  }
+    if (typeof payload != "object") {
+      payload = JSON.parse(payload);
+    }
 
-  if (!payload?.success) {
+    if (!payload?.success) {
+      return null;
+    }
+
+    return payload;
+  } catch {
     return null;
   }
-
-  return payload;
 }
 
 export async function checkAuth() {

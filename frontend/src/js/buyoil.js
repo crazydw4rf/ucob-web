@@ -1,79 +1,94 @@
-import { gsapAnimReveal, syncUserProfile } from "./utils.js";
+import {
+  gsapAnimReveal,
+  syncUserProfile,
+  setupLogout,
+  requireAuth,
+  showLoader,
+  hideLoader,
+} from "./utils.js";
+import { buildAddressPayload, createTransaction } from "./http/transaction.js";
+
+const PRICE_PER_LITER = 5500;
 
 export function initBuyOilPage() {
-  gsapAnimReveal();
-  syncUserProfile();
+  document.addEventListener("DOMContentLoaded", async () => {
+    const currentUser = await requireAuth();
+    if (!currentUser) return;
 
-  // Price calculation
-  const pricePerLiter = 5500;
-  const oilVolumeInput = document.getElementById("oil-volume");
-  const totalPriceDisplay = document.getElementById("total-price");
-  const priceCalculationDisplay = document.getElementById("price-calculation");
+    gsapAnimReveal();
+    await syncUserProfile();
+    setupLogout();
 
-  oilVolumeInput.addEventListener("input", () => {
-    const volume = parseFloat(oilVolumeInput.value) || 0;
-    const totalPrice = volume * pricePerLiter;
+    const oilVolumeInput = document.getElementById("oil-volume");
+    const totalPriceDisplay = document.getElementById("total-price");
+    const priceCalculationDisplay = document.getElementById("price-calculation");
 
-    // Format currency
-    const formattedPrice = new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(totalPrice);
+    oilVolumeInput.addEventListener("input", () => {
+      const volume = parseFloat(oilVolumeInput.value) || 0;
+      const totalPrice = volume * PRICE_PER_LITER;
 
-    totalPriceDisplay.textContent = formattedPrice;
-    priceCalculationDisplay.textContent = `Total = ${volume} Liter x Rp ${pricePerLiter.toLocaleString("id-ID")}`;
-  });
+      totalPriceDisplay.textContent = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(totalPrice);
 
-  // Form submission
-  const buyForm = document.getElementById("buy-form");
-  const successModalElement = document.getElementById("successModal");
-  const successModal = new bootstrap.Modal(successModalElement, {
-    backdrop: "static",
-    keyboard: false,
-  });
+      priceCalculationDisplay.textContent = `Total = ${volume} Liter x Rp ${PRICE_PER_LITER.toLocaleString("id-ID")}`;
+    });
 
-  buyForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+    const buyForm = document.getElementById("buy-form");
+    const successModalElement = document.getElementById("successModal");
+    const successModal = new bootstrap.Modal(successModalElement, {
+      backdrop: "static",
+      keyboard: false,
+    });
 
-    const volume = document.getElementById("oil-volume").value;
-    const address = document.getElementById("delivery-address").value;
+    buyForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    if (!volume || volume <= 0) {
-      alert("Silakan masukkan volume minyak yang valid");
-      return;
-    }
+      const volume = parseFloat(document.getElementById("oil-volume").value);
+      const address = document.getElementById("delivery-address").value;
 
-    if (!address.trim()) {
-      alert("Silakan masukkan alamat pengiriman");
-      return;
-    }
+      if (!volume || volume <= 0) {
+        alert("Silakan masukkan volume minyak yang valid");
+        return;
+      }
 
-    // Show success modal
-    successModal.show();
+      if (!address.trim()) {
+        alert("Silakan masukkan alamat pengiriman");
+        return;
+      }
 
-    // Reset form
-    buyForm.reset();
-    totalPriceDisplay.textContent = "Rp 0";
-    priceCalculationDisplay.textContent = "Total = 0 Liter x Rp 5.500";
-  });
+      const submitBtn = buyForm.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      showLoader();
 
-  // Kembali button handler
-  const btnKembali = document.getElementById("btn-kembali");
-  btnKembali.addEventListener("click", () => {
-    successModal.hide();
-  });
+      const result = await createTransaction({
+        oil_volume: volume,
+        transaction_type: "Purchase",
+        ...buildAddressPayload(address),
+        sale_image_url: null,
+      });
 
-  // Logout button
-  const logoutBtn = document.querySelector(".btn-logout");
-  logoutBtn.addEventListener("click", () => {
-    if (confirm("Apakah Anda yakin ingin logout?")) {
-      // Redirect to login page
-      window.location.href = "login.html";
-    }
+      hideLoader();
+      submitBtn.disabled = false;
+
+      if (!result.success) {
+        alert(result.error?.message || "Gagal mengirim permintaan pembelian.");
+        return;
+      }
+
+      successModal.show();
+      buyForm.reset();
+      totalPriceDisplay.textContent = "Rp 0";
+      priceCalculationDisplay.textContent = "Total = 0 Liter x Rp 5.500";
+    });
+
+    document.getElementById("btn-kembali").addEventListener("click", () => {
+      successModal.hide();
+    });
   });
 }
 
-// Initialize when DOM is ready
-document.addEventListener("DOMContentLoaded", initBuyOilPage);
+initBuyOilPage();

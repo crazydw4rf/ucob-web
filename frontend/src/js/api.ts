@@ -16,11 +16,11 @@ class ApiWrapper<T = any> {
     this.#endpoint = endpoint;
   }
 
-  async getRequest() {
-    return await this.#axios.get<T>(this.#endpoint);
+  async getRequest(params?: Record<string, string | number>) {
+    return await this.#axios.get<T>(this.#endpoint, { params });
   }
 
-  async postRequest(payload: object) {
+  async postRequest(payload: object = {}) {
     return await this.#axios.post<T>(this.#endpoint, payload);
   }
 }

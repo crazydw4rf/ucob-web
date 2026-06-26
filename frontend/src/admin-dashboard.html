@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - UCOB</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body class="d-flex flex-column min-vh-100 bg-light admin-layout">
+    <nav class="navbar navbar-expand-lg bg-dark sticky-top shadow-sm navbar-dark" id="top-navbar">
+      <div class="container-fluid px-4">
+        <a class="navbar-brand text-white" href="admin-dashboard.html">
+          UC<span class="text-warning">OB</span>
+          <span id="admin-badge" class="badge bg-danger ms-2 fs-6">ADMIN</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-center">
+            <li class="nav-item">
+              <a class="nav-link text-white-50" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white-50" href="profile.html">Profile</a>
+            </li>
+            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+              <a class="btn btn-danger px-4 active" href="admin-dashboard.html">Admin Panel</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="dashboard-wrapper">
+      <aside class="sidebar admin-sidebar d-flex flex-column shadow-sm">
+        <h6 class="text-uppercase text-muted fw-bold mb-3 px-3" style="font-size: 0.75rem">Admin Menu</h6>
+
+        <div class="nav flex-column sidebar-nav px-2">
+          <a href="admin-dashboard.html" class="nav-link active" id="nav-admin-dashboard">
+            <i class="bi bi-speedometer2 me-2"></i> Dashboard
+          </a>
+          <a href="admin-transactions.html" class="nav-link" id="nav-admin-transactions">
+            <i class="bi bi-list-check me-2"></i> Kelola Transaksi
+          </a>
+          <a href="profile.html" class="nav-link" id="nav-admin-profile">
+            <i class="bi bi-person me-2"></i> Profile
+          </a>
+        </div>
+
+        <div class="mt-auto border-top pt-3 px-3 pb-2 sidebar-profile">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-shield-lock-fill text-danger" style="font-size: 2rem"></i>
+            <div class="ms-2 overflow-hidden">
+              <div class="fw-bold text-truncate" id="sidebar-user-name" style="font-size: 0.95rem">Loading...</div>
+              <div class="small text-danger fw-semibold" id="sidebar-user-role">Admin</div>
+            </div>
+          </div>
+          <button class="btn btn-outline-danger btn-sm w-100 btn-logout">
+            <i class="bi bi-box-arrow-right me-2"></i>Logout
+          </button>
+        </div>
+      </aside>
+
+      <main class="dashboard-content">
+        <div class="container-fluid gsap-reveal">
+          <div class="mb-4">
+            <h2 class="fw-bold mb-1" id="admin-welcome-title">Admin Dashboard</h2>
+            <p class="text-muted mb-0">Pantau semua transaksi penjualan dan pembelian minyak jelantah.</p>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-lg-3">
+              <div class="admin-stat-card">
+                <div class="admin-stat-icon bg-primary-subtle text-primary">
+                  <i class="bi bi-receipt"></i>
+                </div>
+                <div>
+                  <div class="admin-stat-value" id="stat-total">0</div>
+                  <div class="admin-stat-label">Total Transaksi</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-3">
+              <div class="admin-stat-card">
+                <div class="admin-stat-icon bg-warning-subtle text-warning">
+                  <i class="bi bi-hourglass-split"></i>
+                </div>
+                <div>
+                  <div class="admin-stat-value" id="stat-pending">0</div>
+                  <div class="admin-stat-label">Pending</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-3">
+              <div class="admin-stat-card">
+                <div class="admin-stat-icon bg-success-subtle text-success">
+                  <i class="bi bi-droplet-fill"></i>
+                </div>
+                <div>
+                  <div class="admin-stat-value" id="stat-sale">0</div>
+                  <div class="admin-stat-label">Penjualan</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-3">
+              <div class="admin-stat-card">
+                <div class="admin-stat-icon bg-info-subtle text-info">
+                  <i class="bi bi-cart-fill"></i>
+                </div>
+                <div>
+                  <div class="admin-stat-value" id="stat-purchase">0</div>
+                  <div class="admin-stat-label">Pembelian</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+              <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2 text-danger"></i>Transaksi Terbaru</h5>
+              <a href="admin-transactions.html" class="btn btn-sm btn-outline-danger">Lihat Semua</a>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="ps-4">ID</th>
+                      <th>Tanggal</th>
+                      <th>Tipe</th>
+                      <th>Volume</th>
+                      <th>Status</th>
+                      <th class="text-end pe-4">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recent-transactions-body">
+                    <tr>
+                      <td colspan="6" class="text-center py-4 text-muted">Memuat data...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body">
+              <h6 class="fw-bold text-danger mb-3"><i class="bi bi-info-circle me-2"></i>Endpoint Admin (docsv3)</h6>
+              <div class="row g-3 small">
+                <div class="col-md-6">
+                  <div class="p-3 bg-light rounded">
+                    <code>GET /v1/transaction/admin</code>
+                    <p class="text-muted mb-0 mt-2">Ambil semua transaksi dengan pagination (Admin only).</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 bg-light rounded">
+                    <code>GET /v1/transaction/{id}</code>
+                    <p class="text-muted mb-0 mt-2">Lihat detail transaksi berdasarkan ID.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/admin-dashboard.js"></script>
+  </body>
+</html>

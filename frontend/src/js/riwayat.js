@@ -1,86 +1,60 @@
-import { gsapAnimReveal, syncUserProfile } from "./utils.js";
+import {
+  gsapAnimReveal,
+  syncUserProfile,
+  setupLogout,
+  requireAuth,
+  formatQuantityLiter,
+  formatCurrencyIdr,
+  getStatusBadge,
+} from "./utils.js";
+import { formatTransactionAddress, getTransactions } from "./http/transaction.js";
 
-export function initRiwayatPage() {
-  gsapAnimReveal();
-  syncUserProfile();
+const SELL_PRICE = 6000;
+const BUY_PRICE = 5500;
 
-  // Logout button
-  const logoutBtn = document.querySelector(".btn-logout");
-  logoutBtn.addEventListener("click", () => {
-    if (confirm("Apakah Anda yakin ingin logout?")) {
-      // Redirect to login page
-      window.location.href = "login.html";
-    }
-  });
+async function loadTransactionHistory() {
+  const transactions = await getTransactions();
 
-  // Sample data untuk riwayat penjualan (replace dengan API call jika ada)
-  const sampleSellHistory = [
-    {
-      date: "2026-06-22",
-      quantity: 10.5,
-      total: 63000,
-      status: "ACCEPTED",
-    },
-    {
-      date: "2026-06-20",
-      quantity: 5.0,
-      total: 30000,
-      status: "PENDING",
-    },
-    {
-      date: "2026-06-15",
-      quantity: 15.0,
-      total: 90000,
-      status: "ACCEPTED",
-    },
-  ];
+  const sellData = transactions.filter((tx) => tx.transaction_type === "Sale");
+  const buyData = transactions.filter((tx) => tx.transaction_type === "Purchase");
 
-  const sampleBuyHistory = [
-    {
-      date: "2026-06-21",
-      quantity: 20.0,
-      total: 110000,
-      status: "ACCEPTED",
-    },
-    {
-      date: "2026-06-18",
-      quantity: 30.0,
-      total: 165000,
-      status: "REJECTED",
-    },
-  ];
-
-  const getStatusBadge = (status) => {
-    const s = status.toUpperCase();
-    if (s === "PENDING") return '<span class="badge badge-pending rounded-pill px-3 py-1">Pending</span>';
-    if (s === "ACCEPTED") return '<span class="badge badge-accepted rounded-pill px-3 py-1">Accepted</span>';
-    if (s === "REJECTED") return '<span class="badge badge-rejected rounded-pill px-3 py-1">Rejected</span>';
-    return `<span class="badge bg-secondary rounded-pill px-3 py-1">${status}</span>`;
-  };
-
-  const renderTable = (data, tbodyId) => {
-    const tbody = document.getElementById(tbodyId);
-    if (!data || !data.length) {
-      tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">Tidak ada data</td></tr>`;
-      return;
-    }
-    tbody.innerHTML = data
-      .map(
-        (item) => `
-                    <tr>
-                        <td class="ps-4">${new Date(item.date).toLocaleDateString("id-ID")}</td>
-                        <td class="fw-bold">${parseFloat(item.quantity).toFixed(2)} L</td>
-                        <td class="fw-bold">Rp ${item.total.toLocaleString("id-ID")}</td>
-                        <td>${getStatusBadge(item.status)}</td>
-                    </tr>
-                `
-      )
-      .join("");
-  };
-
-  renderTable(sampleSellHistory, "sell-history-table");
-  renderTable(sampleBuyHistory, "buy-history-table");
+  renderTable(sellData, "sell-history-table", SELL_PRICE);
+  renderTable(buyData, "buy-history-table", BUY_PRICE);
 }
 
-// Initialize when DOM is ready
-document.addEventListener("DOMContentLoaded", initRiwayatPage);
+function renderTable(data, tbodyId, pricePerLiter) {
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">Tidak ada data</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data
+    .map((item) => {
+      const total = item.oil_volume * pricePerLiter;
+      const address = formatTransactionAddress(item);
+
+      return `
+        <tr>
+          <td class="ps-4">${new Date(item.created_at).toLocaleDateString("id-ID")}</td>
+          <td class="fw-bold">${formatQuantityLiter(item.oil_volume)}</td>
+          <td class="text-truncate" style="max-width: 220px;" title="${address}">${address}</td>
+          <td class="fw-bold">${formatCurrencyIdr(total)}</td>
+          <td>${getStatusBadge(item.status)}</td>
+        </tr>
+      `;
+    })
+    .join("");
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const currentUser = await requireAuth();
+  if (!currentUser) return;
+
+  gsapAnimReveal();
+  await syncUserProfile();
+  setupLogout();
+  await loadTransactionHistory();
+});
