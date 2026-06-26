@@ -31,7 +31,10 @@
               <a class="nav-link" href="about.html">About</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="profile.html">Profile</a>
+              <a class="nav-link active d-flex align-items-center" href="profile.html">
+                <span>Profile</span>
+                <span class="ms-2 badge bg-success-subtle text-success" id="navbar-user-name">User</span>
+              </a>
             </li>
             <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
               <a class="btn btn-primary px-4" href="dashboard.html">Dashboard</a>
@@ -56,13 +59,8 @@
                 <h5 class="text-muted border-bottom pb-2 mb-4">Account Details</h5>
 
                 <div class="mb-3">
-                  <label class="form-label text-muted small fw-bold text-uppercase">First Name</label>
-                  <div class="fs-5" id="profile-first-name">-</div>
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label text-muted small fw-bold text-uppercase">Last Name</label>
-                  <div class="fs-5" id="profile-last-name">-</div>
+                  <label class="form-label text-muted small fw-bold text-uppercase">Username</label>
+                  <div class="fs-5" id="profile-username">-</div>
                 </div>
 
                 <div class="mb-4">
@@ -70,7 +68,15 @@
                   <div class="fs-5" id="profile-email">-</div>
                 </div>
 
+                <div class="mb-4">
+                  <label class="form-label text-muted small fw-bold text-uppercase">Member Since</label>
+                  <div class="fs-5" id="profile-created">-</div>
+                </div>
+
                 <div class="d-grid gap-2 mt-5">
+                  <a id="admin-panel-link" href="admin-dashboard.html" class="btn btn-danger d-none">
+                    <i class="bi bi-shield-lock me-2"></i>Admin Panel
+                  </a>
                   <button class="btn btn-outline-danger btn-logout">
                     <i class="bi bi-box-arrow-right me-2"></i>Logout
                   </button>

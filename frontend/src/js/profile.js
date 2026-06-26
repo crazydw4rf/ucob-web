@@ -1,27 +1,51 @@
-import { showLoader, hideLoader } from "./utils.js";
-import { ambilDataUser } from "./http/user.ts";
+import { showLoader, hideLoader, getDisplayName, getRoleLabel, isAdminRole, setupLogout } from "./utils.js";
+import { ambilDataUser } from "./http/user.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   showLoader();
 
-  const user = await ambilDataUser();
+  const result = await ambilDataUser();
 
-  if (!user) {
+  if (!result?.data) {
     window.location.href = "login.html";
     return;
   }
 
-  const fullName = `${user.first_name} ${user.last_name || ""}`.trim();
-  document.getElementById("profile-name").textContent = fullName;
-  document.getElementById("profile-first-name").textContent = user.first_name;
-  document.getElementById("profile-last-name").textContent = user.last_name || "-";
-  document.getElementById("profile-email").textContent = user.email;
+  const user = result.data;
+  const username = getDisplayName(user);
+  const roleText = getRoleLabel(user.role);
+
+  document.getElementById("profile-name").textContent = username;
+  document.getElementById("profile-username").textContent = username;
+  document.getElementById("profile-email").textContent = user.email || "-";
 
   const roleBadge = document.getElementById("profile-role");
-  roleBadge.textContent = user.role;
-  if (user.role === "ADMIN") {
-    roleBadge.classList.replace("bg-primary", "bg-danger");
+  roleBadge.textContent = roleText;
+  roleBadge.classList.remove("bg-primary", "bg-danger");
+  roleBadge.classList.add(isAdminRole(user.role) ? "bg-danger" : "bg-primary");
+
+  const navbarUserName = document.getElementById("navbar-user-name");
+  if (navbarUserName) {
+    navbarUserName.textContent = username;
+    navbarUserName.className = `ms-2 badge ${isAdminRole(user.role) ? "bg-danger-subtle text-danger" : "bg-success-subtle text-success"}`;
   }
 
+  if (user.created_at) {
+    const createdEl = document.getElementById("profile-created");
+    if (createdEl) {
+      createdEl.textContent = new Date(user.created_at).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    }
+  }
+
+  const adminPanelLink = document.getElementById("admin-panel-link");
+  if (adminPanelLink && isAdminRole(user.role)) {
+    adminPanelLink.classList.remove("d-none");
+  }
+
+  setupLogout();
   hideLoader();
 });
