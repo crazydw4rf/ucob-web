@@ -4,6 +4,7 @@ import { TrendingUp, ShoppingCart, Droplet, DollarSign, Edit } from "lucide-reac
 import { getOilPrice, getOilStock, getMe, updateOilPrice, updateOilStock } from "../lib/api";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
+import Skeleton from 'react-loading-skeleton';
 
 export function meta() {
   return [{ title: "Dashboard Overview - UCOB" }];
@@ -106,8 +107,36 @@ export default function DashboardOverview() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-16">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-500 border-t-transparent" />
+        <div className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <Card key={i}>
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <Skeleton width={100} />
+                  <Skeleton circle width={16} height={16} />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton height={32} width={120} className="mb-2" />
+                  <Skeleton width={160} />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 mt-6">
+            <Card>
+              <CardHeader>
+                <Skeleton width={120} height={24} />
+              </CardHeader>
+              <CardContent className="flex gap-4 sm:flex-row">
+                <div className="flex-1">
+                  <Skeleton height={128} style={{ borderRadius: '0.5rem' }} />
+                </div>
+                <div className="flex-1">
+                  <Skeleton height={128} style={{ borderRadius: '0.5rem' }} />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       ) : (
         <>

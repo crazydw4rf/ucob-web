@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
+import { Input } from "../components/ui/Input";
+import Skeleton from 'react-loading-skeleton';
 import { Select } from '../components/ui/Select';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/Card';
 import { UploadCloud } from 'lucide-react';
@@ -133,8 +134,35 @@ export default function SellOil() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-24">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-500 border-t-transparent" />
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div className="space-y-2">
+          <Skeleton height={32} width={250} />
+          <Skeleton width={380} />
+        </div>
+        <Card>
+          <CardHeader>
+            <Skeleton height={24} width={160} className="mb-2" />
+            <Skeleton width={250} />
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4 border-b border-gray-100 pb-6">
+              <Skeleton width={120} height={20} />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Skeleton height={40} />
+                <Skeleton height={40} />
+              </div>
+              <Skeleton height={56} style={{ borderRadius: '0.5rem' }} />
+            </div>
+            <div className="space-y-4">
+              <Skeleton width={120} height={20} />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Skeleton height={40} />
+                <Skeleton height={40} />
+              </div>
+              <Skeleton height={96} />
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }

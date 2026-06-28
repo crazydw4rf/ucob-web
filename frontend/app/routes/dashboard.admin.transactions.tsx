@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Badge } from "../components/ui/Badge";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { Button } from "../components/ui/Button";
 import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/Card";
 import { ShoppingCart, TrendingUp } from "lucide-react";
@@ -157,8 +159,16 @@ export default function AdminTransactions() {
 
       <Card className="overflow-hidden">
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-500 border-t-transparent" />
+          <div className="p-6 space-y-4">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="flex items-center justify-between border-b border-gray-100 pb-4">
+                <Skeleton width={150} />
+                <Skeleton width={100} />
+                <Skeleton width={100} />
+                <Skeleton width={80} height={24} style={{ borderRadius: '9999px' }} />
+                <Skeleton width={80} />
+              </div>
+            ))}
           </div>
         ) : processedTransactions.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-gray-500">
