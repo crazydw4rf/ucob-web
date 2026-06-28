@@ -95,7 +95,7 @@ export default function SellOil() {
       }
 
       await createTransaction({
-        oil_volume: -Math.abs(Number(formData.get('oil_volume'))), // Workaround for backend bug: send negative so backend subtracts a negative (adding to stock)
+        oil_volume: Number(formData.get('oil_volume')),
         transaction_type: 'Sale',
         payment_method: formData.get('payment_method') as 'Qris' | 'Cod',
         address_district: formData.get('address_district') as string,

@@ -1,6 +1,16 @@
-import { Outlet } from "react-router";
+import { Outlet, redirect } from "react-router";
 import { Sidebar } from "../components/Sidebar";
 import { DashboardHeader } from "../components/DashboardHeader";
+import { getMe } from "../lib/api";
+
+export async function clientLoader() {
+  try {
+    await getMe();
+    return null;
+  } catch (error) {
+    return redirect("/login");
+  }
+}
 
 export default function DashboardLayout() {
   return (
