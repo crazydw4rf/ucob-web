@@ -41,8 +41,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
+import { useLocation } from "react-router";
+
 export default function App() {
-  return <Outlet />;
+  const location = useLocation();
+  const isDashboard = location.pathname.startsWith("/dashboard");
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      {!isDashboard && <Navbar />}
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      {!isDashboard && <Footer />}
+    </div>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
