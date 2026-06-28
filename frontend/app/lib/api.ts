@@ -32,6 +32,11 @@ export async function getMe() {
   return res.data;
 }
 
+export async function getUserById(id: number) {
+  const res = await api.get(`/users/${id}`);
+  return res.data;
+}
+
 export async function getAddress() {
   const res = await api.get("/users/address");
   return res.data;

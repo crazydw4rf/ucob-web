@@ -3,7 +3,7 @@ import { Badge } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";
 import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/Card";
 import { ShoppingCart, TrendingUp } from "lucide-react";
-import { getAdminTransactions, updateTransactionStatus, getTransactionDetails } from "../lib/api";
+import { getAdminTransactions, updateTransactionStatus, getTransactionDetails, getUserById } from "../lib/api";
 
 export function meta() {
   return [{ title: "Admin Transactions - UCOB" }];
@@ -68,6 +68,25 @@ export default function AdminTransactions() {
   const handleStatusChange = async (id: number, newStatus: string) => {
     try {
       await updateTransactionStatus(id, newStatus);
+      
+      if (newStatus === 'Delivered' || newStatus === 'Done') {
+        const trx = transactions.find(t => t.id === id);
+        if (trx) {
+          getUserById(trx.user_id).then(userRes => {
+            fetch('/api/email', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                to: userRes.data.email,
+                eventType: 'status_update',
+                transactionId: id,
+                status: newStatus
+              })
+            }).catch(console.error);
+          }).catch(console.error);
+        }
+      }
+      
       // Optimistically update the local state
       setTransactions((prev) =>
         prev.map((trx) =>

@@ -5,7 +5,7 @@ import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/Card';
 import { UploadCloud } from 'lucide-react';
-import { getOilPrice, getAddress, createTransaction, getUploadUrl, STORAGE_URL } from '../lib/api';
+import { getOilPrice, getAddress, createTransaction, getUploadUrl, STORAGE_URL, getMe } from '../lib/api';
 
 export function meta() {
   return [{ title: 'Sell Oil - UCOB' }];
@@ -94,7 +94,7 @@ export default function SellOil() {
         saleImageUrl = `${STORAGE_URL}${public_url_path}`;
       }
 
-      await createTransaction({
+      const res = await createTransaction({
         oil_volume: Number(formData.get('oil_volume')),
         transaction_type: 'Sale',
         payment_method: formData.get('payment_method') as 'Qris' | 'Cod',
@@ -103,6 +103,19 @@ export default function SellOil() {
         address_details: formData.get('address_details') as string,
         sale_image_url: saleImageUrl,
       });
+
+      getMe().then(meRes => {
+        fetch('/api/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: meRes.data.email,
+            eventType: 'created',
+            transactionId: res.data.id,
+            details: `Jual Minyak Bekas: ${formData.get('oil_volume')} Liter`
+          })
+        }).catch(console.error);
+      }).catch(console.error);
 
       setTransactionSuccess({
         volume: Number(formData.get('oil_volume')),

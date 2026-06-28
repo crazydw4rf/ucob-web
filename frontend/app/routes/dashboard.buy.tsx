@@ -4,7 +4,7 @@ import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/Card';
-import { getOilPrice, getAddress, createTransaction, getPaymentUrl, getOilStock, getTransactionPayment } from '../lib/api';
+import { getOilPrice, getAddress, createTransaction, getPaymentUrl, getOilStock, getTransactionPayment, getMe } from '../lib/api';
 import QRCode from 'react-qr-code';
 
 export function meta() {
@@ -102,6 +102,19 @@ export default function BuyOil() {
         paymentMethod: paymentMethod === 'Qris' ? 'QRIS Transfer' : 'Cash on Delivery (COD)',
         payUrl
       });
+
+      getMe().then(meRes => {
+        fetch('/api/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: meRes.data.email,
+            eventType: 'created',
+            transactionId: trx.id,
+            details: `Beli Minyak Daur Ulang: ${trx.oil_volume} Liter`
+          })
+        }).catch(console.error);
+      }).catch(console.error);
     } catch (err: any) {
       setError(err?.response?.data?.error?.message || 'Failed to create transaction.');
     } finally {
