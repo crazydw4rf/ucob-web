@@ -23,6 +23,13 @@ export default function Register() {
     const username = formData.get("username") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setIsLoading(false);
+      return;
+    }
 
     try {
       await register(username, email, password);
@@ -78,6 +85,14 @@ export default function Register() {
                 label="Password"
                 type="password"
                 name="password"
+                autoComplete="new-password"
+                required
+                placeholder="••••••••"
+              />
+              <Input
+                label="Confirm Password"
+                type="password"
+                name="confirmPassword"
                 autoComplete="new-password"
                 required
                 placeholder="••••••••"

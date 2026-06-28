@@ -13,6 +13,7 @@ export function Navbar() {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -126,9 +127,36 @@ export function Navbar() {
                 </Button>
               </Link>
             )}
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden p-2 -mr-2 text-gray-500 hover:bg-gray-100 rounded-md focus:outline-none"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Panel */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 space-y-4 shadow-lg">
+          <NavLink to="/" className={({ isActive }) => `block text-base font-medium ${isActive ? 'text-primary-600' : 'text-gray-600'}`} onClick={() => setIsMobileMenuOpen(false)} end>
+            Home
+          </NavLink>
+          <NavLink to="/about" className={({ isActive }) => `block text-base font-medium ${isActive ? 'text-primary-600' : 'text-gray-600'}`} onClick={() => setIsMobileMenuOpen(false)}>
+            About
+          </NavLink>
+          <Link to="/dashboard" className="block" onClick={() => setIsMobileMenuOpen(false)}>
+            <Button variant="outline" className="w-full justify-start">
+              Dashboard
+            </Button>
+          </Link>
+        </div>
+      )}
     </nav>
   );
 }

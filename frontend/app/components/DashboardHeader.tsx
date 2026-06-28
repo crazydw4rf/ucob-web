@@ -8,7 +8,7 @@ interface UserType {
   role: string;
 }
 
-export function DashboardHeader() {
+export function DashboardHeader({ onMenuClick }: { onMenuClick?: () => void }) {
   const [buyPrice, setBuyPrice] = useState<number>(0);
   const [sellPrice, setSellPrice] = useState<number>(0);
   const [stock, setStock] = useState<number>(0);
@@ -64,9 +64,19 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-40 flex h-20 items-center justify-between bg-white/80 px-6 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300">
+    <header className="sticky top-0 z-40 flex h-20 items-center justify-between bg-white/80 px-4 sm:px-6 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300">
+      {/* Mobile Menu Button */}
+      <button
+        onClick={onMenuClick}
+        className="md:hidden mr-3 p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-md focus:outline-none shrink-0"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
       {/* Realtime Ticker Area */}
-      <div className="flex items-center gap-6 overflow-x-auto no-scrollbar py-2 w-full mr-4">
+      <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto no-scrollbar py-2 w-full mr-4">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50/80 border border-blue-100 shadow-sm transition-transform hover:scale-105 shrink-0">
           <div className="bg-blue-100 p-1.5 rounded-full">
             <Droplet className="h-4 w-4 text-blue-600" />
