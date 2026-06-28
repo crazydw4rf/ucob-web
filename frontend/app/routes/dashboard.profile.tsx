@@ -3,6 +3,8 @@ import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/Card";
 import { getMe, getAddress, saveAddress } from "../lib/api";
+import { Select } from "../components/ui/Select";
+import Skeleton from 'react-loading-skeleton';
 
 export function meta() {
   return [{ title: "Profile - UCOB" }];
@@ -31,12 +33,21 @@ export default function Profile() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const [districts, setDistricts] = useState<{code: string, name: string}[]>([]);
+  const [villages, setVillages] = useState<{code: string, name: string}[]>([]);
+  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  const [selectedVillage, setSelectedVillage] = useState<string>("");
+
   useEffect(() => {
     async function fetchData() {
       try {
         const [userRes, addressRes] = await Promise.allSettled([getMe(), getAddress()]);
         if (userRes.status === "fulfilled") setUser(userRes.value.data);
-        if (addressRes.status === "fulfilled") setAddress(addressRes.value.data);
+        if (addressRes.status === "fulfilled") {
+          setAddress(addressRes.value.data);
+          setSelectedDistrict(addressRes.value.data.district);
+          setSelectedVillage(addressRes.value.data.village);
+        }
       } catch {
         // silently ignore
       } finally {
@@ -44,7 +55,24 @@ export default function Profile() {
       }
     }
     fetchData();
+
+    fetch('/api/wilayah?type=districts')
+      .then(res => res.json())
+      .then(res => setDistricts(res.data || []))
+      .catch(console.error);
   }, []);
+
+  useEffect(() => {
+    const districtObj = districts.find(d => d.name === selectedDistrict);
+    if (districtObj) {
+      fetch(`/api/wilayah?type=villages&code=${districtObj.code}`)
+        .then(res => res.json())
+        .then(res => setVillages(res.data || []))
+        .catch(console.error);
+    } else {
+      setVillages([]);
+    }
+  }, [selectedDistrict, districts]);
 
   const handleSaveAddress = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,12 +81,10 @@ export default function Profile() {
     setError(null);
 
     const formData = new FormData(e.currentTarget);
-    const district = formData.get("district") as string;
-    const village = formData.get("village") as string;
     const details = formData.get("details") as string;
 
     try {
-      const res = await saveAddress(district, village, details, !!address);
+      const res = await saveAddress(selectedDistrict, selectedVillage, details, !!address);
       setAddress(res.data);
       setMessage("Address saved successfully!");
     } catch (err: any) {
@@ -70,8 +96,39 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-24">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-500 border-t-transparent" />
+      <div className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
+        <Skeleton width={200} height={32} className="mb-8" />
+        <div className="grid gap-8 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <Skeleton width={180} height={24} className="mb-2" />
+              <Skeleton width={220} height={16} />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i}>
+                  <Skeleton width={100} height={16} className="mb-1" />
+                  <Skeleton width={150} height={20} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <Skeleton width={180} height={24} className="mb-2" />
+              <Skeleton width={250} height={16} />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {[1, 2, 3].map(i => (
+                <div key={i}>
+                  <Skeleton width={120} height={16} className="mb-1" />
+                  <Skeleton height={40} />
+                </div>
+              ))}
+              <Skeleton height={40} />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -125,17 +182,29 @@ export default function Profile() {
                   {error}
                 </div>
               )}
-              <Input
+              <Select
                 label="District (Kecamatan)"
                 name="district"
-                placeholder="Gondokusuman"
-                defaultValue={address?.district ?? ""}
+                value={selectedDistrict}
+                onChange={(e) => {
+                  setSelectedDistrict(e.target.value);
+                  setSelectedVillage("");
+                }}
+                options={[
+                  { label: "Select District...", value: "", disabled: true },
+                  ...districts.map(d => ({ label: d.name, value: d.name }))
+                ]}
               />
-              <Input
+              <Select
                 label="Village (Kelurahan)"
                 name="village"
-                placeholder="Baciro"
-                defaultValue={address?.village ?? ""}
+                value={selectedVillage}
+                onChange={(e) => setSelectedVillage(e.target.value)}
+                disabled={!selectedDistrict || villages.length === 0}
+                options={[
+                  { label: "Select Village...", value: "", disabled: true },
+                  ...villages.map(v => ({ label: v.name, value: v.name }))
+                ]}
               />
               <div>
                 <label className="mb-1 block text-sm font-medium text-gray-700">Detailed Address</label>

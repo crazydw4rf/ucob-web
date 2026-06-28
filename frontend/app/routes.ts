@@ -6,6 +6,7 @@ export default [
   route("login", "routes/login.tsx"),
   route("register", "routes/register.tsx"),
   route("api/email", "routes/api.email.ts"),
+  route("api/wilayah", "routes/api.wilayah.ts"),
   ...prefix("dashboard", [
     layout("routes/dashboard.tsx", [
       index("routes/dashboard._index.tsx"),
