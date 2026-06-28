@@ -243,8 +243,8 @@ export default function AdminTransactions() {
 
       {/* Transaction Details Modal */}
       {selectedTrx && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <Card className="w-full max-w-lg shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-md animate-fade-in" onClick={() => { setSelectedTrx(null); setTrxDetails(null); }}>
+          <Card className="w-full max-w-lg shadow-2xl animate-slide-up" onClick={(e) => e.stopPropagation()}>
             <CardHeader className="border-b border-gray-100 pb-4">
               <div className="flex justify-between items-start">
                 <div>

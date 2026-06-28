@@ -30,9 +30,8 @@ export function Sidebar() {
 
   return (
     <div className="flex h-full w-64 flex-col border-r border-gray-100 bg-white">
-      {/* Logo Area */}
       <div className="flex h-20 shrink-0 items-center px-6 border-b border-gray-100">
-        <Link to="/" className="flex items-center gap-2 text-2xl font-extrabold tracking-tight text-primary-600 transition-transform hover:scale-105">
+        <Link to="/" viewTransition className="flex items-center gap-2 text-2xl font-extrabold tracking-tight text-primary-600 transition-transform hover:scale-105">
           <div>UC<span className="text-secondary-500">OB</span></div>
         </Link>
       </div>
@@ -47,6 +46,7 @@ export function Sidebar() {
               key={item.name}
               to={item.href}
               end={item.end}
+              viewTransition
               className={({ isActive }) =>
                 cn(
                   "group flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
@@ -81,6 +81,7 @@ export function Sidebar() {
                   key={item.name}
                   to={item.href}
                   end={item.end}
+                  viewTransition
                   className={({ isActive }) =>
                     cn(
                       "group flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors mt-1",

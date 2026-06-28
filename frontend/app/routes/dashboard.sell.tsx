@@ -236,8 +236,8 @@ export default function SellOil() {
 
       {/* SUCCESS MODAL / POP-UP */}
       {transactionSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <Card className="w-full max-w-md shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-md animate-fade-in" onClick={() => setTransactionSuccess(null)}>
+          <Card className="w-full max-w-md shadow-2xl animate-slide-up" onClick={(e) => e.stopPropagation()}>
             <CardHeader className="text-center border-b border-gray-100 pb-4">
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary-100">
                 <svg className="h-6 w-6 text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">

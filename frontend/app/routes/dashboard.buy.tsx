@@ -194,8 +194,8 @@ export default function BuyOil() {
 
       {/* SUCCESS MODAL / POP-UP */}
       {transactionSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm overflow-y-auto pt-20 pb-10">
-          <Card className={`w-full ${transactionSuccess.payUrl ? 'max-w-2xl' : 'max-w-md'} shadow-2xl animate-in fade-in zoom-in duration-200 my-auto`}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-md overflow-y-auto pt-20 pb-10 animate-fade-in" onClick={() => setTransactionSuccess(null)}>
+          <Card className={`w-full ${transactionSuccess.payUrl ? 'max-w-2xl' : 'max-w-md'} shadow-2xl animate-slide-up my-auto`} onClick={(e) => e.stopPropagation()}>
             <CardHeader className="text-center pb-2">
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                 <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
