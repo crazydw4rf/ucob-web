@@ -7,7 +7,7 @@ export async function action({ request }: { request: Request }) {
 
   try {
     const data = await request.json();
-    const { to, eventType, transactionId, status, details } = data;
+    let { to, eventType, transactionId, status, details } = data;
 
     if (!to) {
       return Response.json({ error: "Missing recipient email" }, { status: 400 });
