@@ -75,7 +75,7 @@ export function Navbar() {
             ) : user ? (
               <div className="flex items-center gap-4">
                 <Link to="/dashboard" className="hidden sm:block">
-                  <Button variant="outline" size="sm">
+                  <Button variant="primary" size="sm">
                     Dashboard
                   </Button>
                 </Link>

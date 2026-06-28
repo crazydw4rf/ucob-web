@@ -12,27 +12,23 @@ export default function Index() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-500/5 to-secondary-500/5 py-24 border-b border-gray-100">
-        <div className="container mx-auto px-4 text-center">
-          <div className="mx-auto max-w-3xl">
-            <h1 className="mb-6 text-5xl font-bold tracking-tight text-gray-900 md:text-6xl">
-              Ubah Minyak Jelantah Anda Menjadi <span className="text-primary-600">Cuan & Kebaikan</span>
+      <section className="relative py-32 border-b border-gray-100 flex items-center justify-center min-h-[600px] overflow-hidden">
+        {/* Full Width Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img src="/hero.webp" alt="UCOB Hero" className="w-full h-full object-cover" />
+          {/* Dim and blur overlay */}
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-[4px]"></div>
+        </div>
+
+        {/* Content Overlapping the Background */}
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="mx-auto max-w-3xl text-white">
+            <h1 className="mb-6 text-5xl font-bold tracking-tight md:text-6xl text-white drop-shadow-md">
+              Ubah Minyak Jelantah Anda Menjadi <span className="text-primary-400">Cuan & Kebaikan</span>
             </h1>
-            <p className="mb-10 text-lg text-gray-600 md:text-xl">
+            <p className="text-lg md:text-xl text-gray-200 drop-shadow">
               Jangan buang minyak sisa penggorengan Anda! Bergabunglah dengan platform revolusioner kami untuk menyulap limbah dapur menjadi penghasilan tambahan, atau dapatkan pasokan minyak daur ulang berkualitas untuk bisnis Anda. Mudah, praktis, dan menguntungkan!
             </p>
-            <div className="flex flex-col justify-center gap-4 sm:flex-row">
-              <Link to="/dashboard/sell">
-                <Button size="lg" className="w-full sm:w-auto px-8 font-semibold">
-                  Jual Minyak Jelantah
-                </Button>
-              </Link>
-              <Link to="/dashboard/buy">
-                <Button variant="secondary" size="lg" className="w-full sm:w-auto px-8 font-semibold">
-                  Beli Minyak Murni
-                </Button>
-              </Link>
-            </div>
           </div>
         </div>
       </section>
