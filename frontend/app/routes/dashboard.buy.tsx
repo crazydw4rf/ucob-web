@@ -215,7 +215,7 @@ export default function BuyOil() {
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-gray-900">Alamat Pengantaran (Terbatas pada wilayah Purwokerto)</h3>
+              <h3 className="text-sm font-semibold text-gray-900">Alamat Pengantaran (Terbatas pada Kabupaten Banyumas)</h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Select
                   label="District (Kecamatan)"

@@ -257,7 +257,7 @@ export default function SellOil() {
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-gray-900">Alamat Penjemputan (Terbatas pada wilayah Purwokerto)</h3>
+              <h3 className="text-sm font-semibold text-gray-900">Alamat Penjemputan (Terbatas pada Kabupaten Banyumas)</h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Select
                   label="District (Kecamatan)"
