@@ -37,7 +37,11 @@ export async function getAddress() {
   return res.data;
 }
 
-export async function saveAddress(district: string, village: string, details: string) {
+export async function saveAddress(district: string, village: string, details: string, isUpdate: boolean = false) {
+  if (isUpdate) {
+    const res = await api.patch("/users/address", { district, village, details });
+    return res.data;
+  }
   const res = await api.post("/users/address", { district, village, details });
   return res.data;
 }

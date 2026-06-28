@@ -58,7 +58,7 @@ export default function Profile() {
     const details = formData.get("details") as string;
 
     try {
-      const res = await saveAddress(district, village, details);
+      const res = await saveAddress(district, village, details, !!address);
       setAddress(res.data);
       setMessage("Address saved successfully!");
     } catch (err: any) {
