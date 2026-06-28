@@ -14,6 +14,7 @@ export default [
       route("transactions", "routes/dashboard.transactions.tsx"),
       route("profile", "routes/dashboard.profile.tsx"),
       route("info", "routes/dashboard.info.tsx"),
+      route("contact", "routes/dashboard.contact.tsx"),
       route("admin", "routes/dashboard.admin._index.tsx"),
       route("admin/transactions", "routes/dashboard.admin.transactions.tsx"),
     ]),

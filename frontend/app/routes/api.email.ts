@@ -31,6 +31,19 @@ export async function action({ request }: { request: Request }) {
         <p>Halo, status transaksi Anda (TRX-${String(transactionId).padStart(4, "0")}) telah diperbarui menjadi: <strong>${status}</strong>.</p>
         <p>Terima kasih telah mempercayakan transaksi minyak bekas Anda kepada UCOB!</p>
       `;
+    } else if (eventType === "contact_support") {
+      subject = `[UCOB Support] Pesan dari ${data.userEmail || 'Pengguna'}: ${data.subject}`;
+      html = `
+        <h2>Pesan Customer Service Baru</h2>
+        <p><strong>Dari:</strong> ${data.userEmail || 'Pengguna'}</p>
+        <p><strong>Subjek:</strong> ${data.subject}</p>
+        <hr />
+        <p>${details}</p>
+      `;
+      // Override to for support messages
+      if (process.env.GMAIL_USER) {
+         to = process.env.GMAIL_USER;
+      }
     }
 
     await sendEmail({

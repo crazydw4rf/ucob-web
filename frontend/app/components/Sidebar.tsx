@@ -20,6 +20,7 @@ export function Sidebar() {
     { name: "My Transactions", href: "/dashboard/transactions", icon: History },
     { name: "Profile", href: "/dashboard/profile", icon: User },
     { name: "Pusat Informasi", href: "/dashboard/info", icon: Info },
+    { name: "Contact Support", href: "/dashboard/contact", icon: Users },
   ];
 
   const adminNavigation = [
