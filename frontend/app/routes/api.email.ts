@@ -1,7 +1,6 @@
-import { ActionFunctionArgs } from "react-router";
 import { sendEmail } from "../lib/mailer.server";
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request }: { request: Request }) {
   if (request.method !== "POST") {
     return Response.json({ error: "Method not allowed" }, { status: 405 });
   }
