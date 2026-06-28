@@ -31,9 +31,11 @@ export default function BuyOil() {
   } | null>(null);
 
   // Address defaults
-  const [defaultDistrict, setDefaultDistrict] = useState('');
-  const [defaultVillage, setDefaultVillage] = useState('');
   const [defaultDetails, setDefaultDetails] = useState('');
+  const [districts, setDistricts] = useState<{code: string, name: string}[]>([]);
+  const [villages, setVillages] = useState<{code: string, name: string}[]>([]);
+  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  const [selectedVillage, setSelectedVillage] = useState<string>("");
 
   const total = Number(volume || 0) * pricePerLiter;
 
@@ -45,9 +47,9 @@ export default function BuyOil() {
         if (stockRes.status === 'fulfilled') setStock(stockRes.value.data.delta);
         if (addressRes.status === 'fulfilled') {
           const addr = addressRes.value.data;
-          setDefaultDistrict(addr.district ?? '');
-          setDefaultVillage(addr.village ?? '');
           setDefaultDetails(addr.details ?? '');
+          setSelectedDistrict(addr.district ?? '');
+          setSelectedVillage(addr.village ?? '');
         }
       } catch {
         // ignore
@@ -56,7 +58,24 @@ export default function BuyOil() {
       }
     }
     fetchData();
+
+    fetch('/api/wilayah?type=districts')
+      .then(res => res.json())
+      .then(res => setDistricts(res.data || []))
+      .catch(console.error);
   }, []);
+
+  useEffect(() => {
+    const districtObj = districts.find(d => d.name === selectedDistrict);
+    if (districtObj) {
+      fetch(`/api/wilayah?type=villages&code=${districtObj.code}`)
+        .then(res => res.json())
+        .then(res => setVillages(res.data || []))
+        .catch(console.error);
+    } else {
+      setVillages([]);
+    }
+  }, [selectedDistrict, districts]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -196,10 +215,34 @@ export default function BuyOil() {
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-gray-900">Alamat Pengantaran</h3>
+              <h3 className="text-sm font-semibold text-gray-900">Alamat Pengantaran (Terbatas pada wilayah Purwokerto)</h3>
               <div className="grid gap-4 sm:grid-cols-2">
-                <Input label="District (Kecamatan)" name="address_district" required defaultValue={defaultDistrict} />
-                <Input label="Village (Kelurahan)" name="address_village" required defaultValue={defaultVillage} />
+                <Select
+                  label="District (Kecamatan)"
+                  name="address_district"
+                  value={selectedDistrict}
+                  onChange={(e) => {
+                    setSelectedDistrict(e.target.value);
+                    setSelectedVillage("");
+                  }}
+                  required
+                  options={[
+                    { label: "Select District...", value: "", disabled: true },
+                    ...districts.map(d => ({ label: d.name, value: d.name }))
+                  ]}
+                />
+                <Select
+                  label="Village (Kelurahan)"
+                  name="address_village"
+                  value={selectedVillage}
+                  onChange={(e) => setSelectedVillage(e.target.value)}
+                  disabled={!selectedDistrict || villages.length === 0}
+                  required
+                  options={[
+                    { label: "Select Village...", value: "", disabled: true },
+                    ...villages.map(v => ({ label: v.name, value: v.name }))
+                  ]}
+                />
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-gray-700">Detail Alamat Pengantaran</label>

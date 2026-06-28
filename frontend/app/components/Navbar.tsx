@@ -142,8 +142,12 @@ export function Navbar() {
       </div>
 
       {/* Mobile Menu Panel */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 space-y-4 shadow-lg">
+      <div 
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white ${
+          isMobileMenuOpen ? 'max-h-64 border-t border-gray-100' : 'max-h-0'
+        }`}
+      >
+        <div className="px-4 py-4 space-y-4 shadow-lg">
           <NavLink to="/" className={({ isActive }) => `block text-base font-medium ${isActive ? 'text-primary-600' : 'text-gray-600'}`} onClick={() => setIsMobileMenuOpen(false)} end>
             Home
           </NavLink>
@@ -156,7 +160,7 @@ export function Navbar() {
             </Button>
           </Link>
         </div>
-      )}
+      </div>
     </nav>
   );
 }
