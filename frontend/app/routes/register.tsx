@@ -24,6 +24,20 @@ export default function Register() {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
+    const agreement = formData.get("agreement");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      setIsLoading(false);
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
@@ -97,6 +111,22 @@ export default function Register() {
                 required
                 placeholder="••••••••"
               />
+              <div className="flex items-start pt-2">
+                <div className="flex h-5 items-center">
+                  <input
+                    id="agreement"
+                    name="agreement"
+                    type="checkbox"
+                    required
+                    className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                  />
+                </div>
+                <div className="ml-3 text-sm">
+                  <label htmlFor="agreement" className="font-medium text-gray-700">
+                    I agree to the <span className="text-primary-600 hover:underline cursor-pointer">Terms of Service</span> and <span className="text-primary-600 hover:underline cursor-pointer">Privacy Policy</span>
+                  </label>
+                </div>
+              </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
               <Button type="submit" className="w-full" isLoading={isLoading}>
